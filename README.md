@@ -26,15 +26,10 @@ Thư viện **AI SQL Chatbot** là một giải pháp "Auto-Database-Agent" mạ
 
 Cài đặt thư viện thông qua `npm`:
 
-Nếu thư viện đã được publish lên npm (Dành cho Production):
-```bash
-npm install ai-sql-chatbot
-```
 
-Nếu bạn đang thử nghiệm ở máy cá nhân (Local) và chưa đưa thư viện lên npm, bạn có thể cài đặt trực tiếp từ thư mục chứa code:
 ```bash
 # Trỏ đường dẫn tới thư mục ai-sql-chatbot của bạn
-npm install /đường/dẫn/đến/thư/mục/ai-sql-chatbot
+npm install https://github.com/huongcaoha/ai-sql-chatbot
 ```
 
 ---
