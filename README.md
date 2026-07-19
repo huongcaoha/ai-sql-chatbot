@@ -8,7 +8,7 @@ Thư viện **AI SQL Chatbot** là một giải pháp "Auto-Database-Agent" mạ
 
 - **Tự động hóa hoàn toàn (Auto-SQL):** Tự động đọc cấu trúc các bảng trong Database để làm ngữ cảnh (Context) cho AI.
 - **Hỗ trợ đa Database:** Hiện tại hỗ trợ MySQL (PostgreSQL và MongoDB đang được phát triển).
-- **Trí tuệ nhân tạo:** Tích hợp sẵn sức mạnh của Google Gemini (Hỗ trợ mô hình `gemini-flash-lite-latest` tối ưu hóa cho Text-to-SQL).
+- **Trí tuệ nhân tạo:** Hỗ trợ đa nền tảng AI bao gồm **Google Gemini**, **NVIDIA NIM**, **OpenAI**, **Groq**, **Ollama**, v.v. (thông qua chuẩn OpenAI-Compatible).
 - **Giao diện React mượt mà:** Cung cấp sẵn component `<ChatBot />` đẹp mắt, dễ tuỳ chỉnh, dễ tích hợp.
 - **Bảo mật cao:** Cơ chế kiểm tra bảo mật ngăn chặn các câu lệnh SQL độc hại (`DROP`, `DELETE`, `UPDATE`, `INSERT`).
 
@@ -56,9 +56,20 @@ app.use(express.json());
 // Khởi tạo Agent
 const chatAgent = new AutoSqlAgent({
   ai: {
-    provider: 'google-gemini',
-    apiKey: 'YOUR_GEMINI_API_KEY', // Khuyên dùng biến môi trường process.env.GEMINI_API_KEY
-    model: 'gemini-flash-lite-latest' 
+    // ----------------------------------------------------
+    // CÁCH 1: Dùng Google Gemini (Mặc định)
+    // ----------------------------------------------------
+    // provider: 'google-gemini',
+    // apiKey: 'YOUR_GEMINI_API_KEY', 
+    // model: 'gemini-1.5-flash', // Khuyên dùng 1.5-flash hoặc 1.5-pro
+
+    // ----------------------------------------------------
+    // CÁCH 2: Dùng NVIDIA NIM hoặc OpenAI-Compatible (Khuyên dùng)
+    // ----------------------------------------------------
+    provider: 'openai-compatible',
+    baseURL: 'https://integrate.api.nvidia.com/v1', // Hoặc URL của OpenAI, Groq, Ollama...
+    apiKey: 'YOUR_NVIDIA_API_KEY', // Khuyên dùng biến môi trường process.env.API_KEY
+    model: 'meta/llama-3.1-70b-instruct' // Đổi tên model tương ứng với provider
   },
   database: {
     type: 'mysql',
