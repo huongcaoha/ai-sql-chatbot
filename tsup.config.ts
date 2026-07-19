@@ -15,7 +15,7 @@ export default defineConfig([
     dts: false,
     outDir: 'dist/react',
     clean: true,
-    external: ['react', 'react-dom'],
+    external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
   },
   {
     entry: ['src/bin/cli.ts'],

@@ -7,19 +7,22 @@ export interface ChatBotProps {
   title?: string;
   placeholder?: string;
   primaryColor?: string;
+  renderCustomData?: (data: any[]) => React.ReactNode;
 }
 
 interface Message {
   id: string;
   role: 'user' | 'bot';
   text: string;
+  payload?: any[];
 }
 
 export const ChatBot: React.FC<ChatBotProps> = ({
   apiEndpoint,
   title = 'Data Assistant',
   placeholder = 'Hỏi bất kỳ điều gì về dữ liệu...',
-  primaryColor = '#2563eb'
+  primaryColor = '#2563eb',
+  renderCustomData
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -56,7 +59,8 @@ export const ChatBot: React.FC<ChatBotProps> = ({
       const botMsg: Message = { 
         id: (Date.now() + 1).toString(), 
         role: 'bot', 
-        text: data.text || 'Lỗi xử lý dữ liệu.' 
+        text: data.text || 'Lỗi xử lý dữ liệu.',
+        payload: data.data
       };
       
       setMessages(prev => [...prev, botMsg]);
@@ -121,18 +125,21 @@ export const ChatBot: React.FC<ChatBotProps> = ({
             {msg.role === 'user' ? (
               msg.text
             ) : (
-              <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  table: ({node, ...props}) => <table style={{ borderCollapse: 'collapse', width: '100%', margin: '10px 0', fontSize: '13px', backgroundColor: 'white', color: '#1f2937' }} {...props} />,
-                  th: ({node, ...props}) => <th style={{ border: '1px solid #d1d5db', padding: '6px', backgroundColor: '#f9fafb', textAlign: 'left' }} {...props} />,
-                  td: ({node, ...props}) => <td style={{ border: '1px solid #d1d5db', padding: '6px' }} {...props} />,
-                  img: ({node, ...props}) => <img style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} {...props} />,
-                  p: ({node, ...props}) => <p style={{ margin: '4px 0' }} {...props} />
-                }}
-              >
-                {msg.text}
-              </ReactMarkdown>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {msg.payload && renderCustomData && renderCustomData(msg.payload)}
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    table: ({node, ...props}) => <table style={{ borderCollapse: 'collapse', width: '100%', margin: '10px 0', fontSize: '13px', backgroundColor: 'white', color: '#1f2937' }} {...props} />,
+                    th: ({node, ...props}) => <th style={{ border: '1px solid #d1d5db', padding: '6px', backgroundColor: '#f9fafb', textAlign: 'left' }} {...props} />,
+                    td: ({node, ...props}) => <td style={{ border: '1px solid #d1d5db', padding: '6px' }} {...props} />,
+                    img: ({node, ...props}) => <img style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} {...props} />,
+                    p: ({node, ...props}) => <p style={{ margin: '4px 0' }} {...props} />
+                  }}
+                >
+                  {msg.text}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
         ))}
