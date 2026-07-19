@@ -41,9 +41,10 @@ npm install https://github.com/huongcaoha/ai-sql-chatbot
 Ở phía server, bạn sử dụng `AutoSqlAgent` để thiết lập kết nối và xử lý logic.
 
 ```javascript
-// 1. Cài đặt các thư viện cần thiết cho server:
-// npm install express cors
+// B1. Cài đặt các thư viện cần thiết cho server:
+npm install express cors
 
+// B2 : Tạo thư mục servers và tạo file server.js 
 import express from 'express';
 import cors from 'cors';
 import { AutoSqlAgent } from 'ai-sql-chatbot/server';
