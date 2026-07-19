@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/server/index.js",
+  "bin": {
+    "ai-sql-chatbot-gen": "./dist/bin/cli.js"
+  },
   "exports": {
     "./server": {
       "import": "./dist/server/index.mjs",
@@ -33,6 +36,7 @@
   },
   "dependencies": {
     "@google/genai": "^2.12.0",
+    "dotenv": "^17.4.2",
     "mongodb": "^7.5.0",
     "mysql2": "^3.23.0",
     "pg": "^8.22.0",

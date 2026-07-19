@@ -110,7 +110,7 @@ import { ChatBot } from 'ai-sql-chatbot/react';
 
 function App() {
   return (
-    <div style={{ padding: '50px', display: 'flex', justifyContent: 'center' }}>
+    <div>
       <ChatBot 
         apiEndpoint="http://localhost:3000/api/chat"
         title="Trợ lý Dữ liệu Thông minh"
@@ -123,6 +123,26 @@ function App() {
 
 export default App;
 ```
+
+### 3. Tự động sinh Code Giao diện (Auto-Generative UI)
+
+Thư viện cung cấp công cụ AI tự động viết code giao diện (React Component) dựa trên Database của bạn:
+
+1. Chạy lệnh sau tại thư mục Frontend của bạn:
+   ```bash
+   npx ai-sql-chatbot-gen
+   ```
+2. Nhập thông tin Database khi được yêu cầu. AI sẽ tự động phân tích và sinh ra file `ChatAutoUI.tsx`.
+3. Import file này vào `ChatBot`:
+   ```tsx
+   import { renderAutoUI } from './ChatAutoUI';
+   
+   <ChatBot 
+     apiEndpoint="http://localhost:3000/api/chat"
+     renderCustomData={renderAutoUI} 
+   />
+   ```
+Bạn có thể tự do mở file `ChatAutoUI.tsx` để chỉnh sửa màu sắc, bố cục CSS theo ý muốn!
 
 ---
 

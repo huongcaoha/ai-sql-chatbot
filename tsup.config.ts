@@ -16,5 +16,13 @@ export default defineConfig([
     outDir: 'dist/react',
     clean: true,
     external: ['react', 'react-dom'],
+  },
+  {
+    entry: ['src/bin/cli.ts'],
+    format: ['cjs'],
+    dts: false,
+    outDir: 'dist/bin',
+    clean: true,
+    target: 'node18',
   }
 ]);

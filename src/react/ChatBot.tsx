@@ -21,6 +21,7 @@ export const ChatBot: React.FC<ChatBotProps> = ({
   placeholder = 'Hỏi bất kỳ điều gì về dữ liệu...',
   primaryColor = '#2563eb'
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { id: '1', role: 'bot', text: 'Xin chào! Tôi có thể giúp bạn truy vấn dữ liệu nào hôm nay?' }
   ]);
@@ -67,17 +68,18 @@ export const ChatBot: React.FC<ChatBotProps> = ({
   };
 
   return (
-    <div style={{
-      width: '350px',
-      height: '500px',
-      border: '1px solid #e5e7eb',
-      borderRadius: '12px',
-      display: 'flex',
-      flexDirection: 'column',
-      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-      backgroundColor: '#fff',
-      fontFamily: 'system-ui, sans-serif'
-    }}>
+    <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px', fontFamily: 'system-ui, sans-serif' }}>
+      {isOpen ? (
+        <div style={{
+          width: '350px',
+          height: '500px',
+          border: '1px solid #e5e7eb',
+          borderRadius: '12px',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+          backgroundColor: '#fff'
+        }}>
       <div style={{
         padding: '16px',
         backgroundColor: primaryColor,
@@ -85,9 +87,17 @@ export const ChatBot: React.FC<ChatBotProps> = ({
         borderTopLeftRadius: '12px',
         borderTopRightRadius: '12px',
         fontWeight: 'bold',
-        textAlign: 'center'
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }}>
-        {title}
+        <span>{title}</span>
+        <button 
+          onClick={() => setIsOpen(false)} 
+          style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', fontSize: '16px' }}
+        >
+          ✖
+        </button>
       </div>
       
       <div style={{
@@ -169,6 +179,28 @@ export const ChatBot: React.FC<ChatBotProps> = ({
           Gửi
         </button>
       </div>
+      </div>
+      ) : (
+        <button
+          onClick={() => setIsOpen(true)}
+          style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            backgroundColor: primaryColor,
+            color: 'white',
+            border: 'none',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '28px'
+          }}
+        >
+          💬
+        </button>
+      )}
     </div>
   );
 };
