@@ -83,7 +83,7 @@ export const renderAutoUI = (data: any[]) => {
 `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-pro',
+      model: 'gemini-flash-lite-latest',
       contents: prompt,
       config: { temperature: 0.2 }
     });
