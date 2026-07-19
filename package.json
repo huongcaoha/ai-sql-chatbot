@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepare": "tsup"
   },
   "peerDependencies": {
     "react": ">=18",
