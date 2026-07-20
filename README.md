@@ -83,7 +83,7 @@ const chatAgent = new AutoSqlAgent({
   systemPrompt: 'Bạn là một trợ lý dữ liệu thân thiện. Nếu có link ảnh hãy hiển thị bằng cú pháp Markdown.',
   
   // (Mới) Cấu hình các đường dẫn (Routes) để AI tự động chuyển trang khi cần 
-  // Bạn hãy sửa lại các đường dẫn này theo dự án của mình nhé 
+  // Bạn hãy sửa lại các đường dẫn này theo dự án của mình nhé (có thể đưa các trang định tuyến routes lên AI bắt trả về định dạng mẫu giống bên dưới)
   routes: [
     // { path: '/movies', description: 'Trang danh sách các bộ phim' },
     // { path: '/movie-detail', description: 'Trang chi tiết của một bộ phim' },
@@ -127,6 +127,8 @@ Trong ứng dụng React của bạn, chỉ cần import component `<ChatBot />`
 // App.tsx
 import React from 'react';
 // Import hook chuyển trang của bạn (ví dụ React Router)
+
+// Copy phần import , biến navigate và hàm handleNavigate vào component của bạn => thêm component ChatBot vào phần giao diện bạn muốn hiển thị (thường là footer)
 import { useNavigate } from 'react-router-dom'; 
 import { ChatBot } from 'ai-sql-chatbot/react';
 
@@ -164,7 +166,7 @@ Thư viện cung cấp công cụ AI tự động viết code giao diện (React
    ```bash
    npx ai-sql-chatbot-gen
    ```
-2. Nhập thông tin Database khi được yêu cầu. AI sẽ tự động phân tích và sinh ra file `ChatAutoUI.tsx`.
+2. Nhập thông tin Database khi được yêu cầu. AI sẽ tự động phân tích và sinh ra file `ChatAutoUI.tsx`. Bạn hãy di chuyển file này vào thư mục cùng cấp với file bạn import ChatBot .
 3. Import file này vào `ChatBot`:
    ```tsx
    import { renderAutoUI } from './ChatAutoUI';
