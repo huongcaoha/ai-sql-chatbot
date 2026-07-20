@@ -80,7 +80,15 @@ const chatAgent = new AutoSqlAgent({
     // autoFilterTables: true, // (Mặc định là true) AI sẽ tự động phân tích và chặn truy cập các bảng nhạy cảm (users, payment...)
     // allowedTables: ['products', 'movies'], // Nếu muốn tự thiết lập bằng tay, hãy bỏ comment dòng này
   },
-  systemPrompt: 'Bạn là một trợ lý dữ liệu thân thiện. Nếu có link ảnh hãy hiển thị bằng cú pháp Markdown.'
+  systemPrompt: 'Bạn là một trợ lý dữ liệu thân thiện. Nếu có link ảnh hãy hiển thị bằng cú pháp Markdown.',
+  
+  // (Mới) Cấu hình các đường dẫn (Routes) để AI tự động chuyển trang khi cần 
+  // Bạn hãy sửa lại các đường dẫn này theo dự án của mình nhé 
+  routes: [
+    // { path: '/movies', description: 'Trang danh sách các bộ phim' },
+    // { path: '/movie-detail', description: 'Trang chi tiết của một bộ phim' },
+    // { path: '/cart', description: 'Giỏ hàng của người dùng' }
+  ]
 });
 
 // Chạy hàm khởi tạo để kết nối DB và đọc Schema
@@ -118,9 +126,20 @@ Trong ứng dụng React của bạn, chỉ cần import component `<ChatBot />`
 ```tsx
 // App.tsx
 import React from 'react';
+// Import hook chuyển trang của bạn (ví dụ React Router)
+import { useNavigate } from 'react-router-dom'; 
 import { ChatBot } from 'ai-sql-chatbot/react';
 
 function App() {
+  const navigate = useNavigate();
+
+  // Xử lý sự kiện AI muốn chuyển trang
+  const handleNavigate = (path, params) => {
+    console.log("AI yêu cầu chuyển đến:", path, params);
+    const queryString = params ? new URLSearchParams(params).toString() : '';
+    navigate(queryString ? `${path}?${queryString}` : path);
+  };
+
   return (
     <div>
       <ChatBot 
@@ -128,6 +147,7 @@ function App() {
         title="Trợ lý Dữ liệu Thông minh"
         placeholder="Ví dụ: Có bao nhiêu nhân viên trong công ty?"
         primaryColor="#10b981" // Tùy chỉnh màu sắc thương hiệu của bạn
+        onNavigate={handleNavigate} // Truyền callback chuyển trang
       />
     </div>
   );

@@ -8,6 +8,7 @@ export interface ChatBotProps {
   placeholder?: string;
   primaryColor?: string;
   renderCustomData?: (data: any[]) => React.ReactNode;
+  onNavigate?: (path: string, params?: Record<string, any>) => void;
 }
 
 interface Message {
@@ -22,17 +23,29 @@ export const ChatBot: React.FC<ChatBotProps> = ({
   title = 'Data Assistant',
   placeholder = 'Hỏi bất kỳ điều gì về dữ liệu...',
   primaryColor = '#2563eb',
-  renderCustomData
+  renderCustomData,
+  onNavigate
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: '1', role: 'bot', text: 'Xin chào! Tôi có thể giúp bạn truy vấn dữ liệu nào hôm nay?' }
-  ]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const saved = sessionStorage.getItem('ai_sql_chatbot_history');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse chat history", e);
+      }
+    }
+    return [
+      { id: '1', role: 'bot', text: 'Xin chào! Tôi có thể giúp bạn truy vấn dữ liệu nào hôm nay?' }
+    ];
+  });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    sessionStorage.setItem('ai_sql_chatbot_history', JSON.stringify(messages));
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
@@ -64,6 +77,10 @@ export const ChatBot: React.FC<ChatBotProps> = ({
       };
       
       setMessages(prev => [...prev, botMsg]);
+
+      if (data.navigateAction && onNavigate) {
+        onNavigate(data.navigateAction.path, data.navigateAction.params);
+      }
     } catch (err) {
       setMessages(prev => [...prev, { id: Date.now().toString(), role: 'bot', text: 'Lỗi kết nối tới máy chủ.' }]);
     } finally {
@@ -134,7 +151,39 @@ export const ChatBot: React.FC<ChatBotProps> = ({
                     th: ({node, ...props}) => <th style={{ border: '1px solid #d1d5db', padding: '6px', backgroundColor: '#f9fafb', textAlign: 'left' }} {...props} />,
                     td: ({node, ...props}) => <td style={{ border: '1px solid #d1d5db', padding: '6px' }} {...props} />,
                     img: ({node, ...props}) => <img style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} {...props} />,
-                    p: ({node, ...props}) => <p style={{ margin: '4px 0' }} {...props} />
+                    p: ({node, ...props}) => <p style={{ margin: '4px 0' }} {...props} />,
+                    a: ({node, href, children, ...props}) => {
+                      return (
+                        <a 
+                          {...props} 
+                          href={href}
+                          onClick={(e) => {
+                            if (href && href.startsWith('/') && onNavigate) {
+                              e.preventDefault();
+                              try {
+                                const url = new URL(href, window.location.origin);
+                                const params = Object.fromEntries(url.searchParams.entries());
+                                onNavigate(url.pathname, params);
+                              } catch (err) {
+                                console.error('Invalid URL:', href);
+                              }
+                            }
+                          }}
+                          style={{ 
+                            color: 'white', 
+                            backgroundColor: primaryColor, 
+                            padding: '4px 8px', 
+                            borderRadius: '4px', 
+                            textDecoration: 'none', 
+                            display: 'inline-block',
+                            fontWeight: 'bold',
+                            cursor: 'pointer' 
+                          }}
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
                   }}
                 >
                   {msg.text}
