@@ -59,17 +59,17 @@ const chatAgent = new AutoSqlAgent({
     // ----------------------------------------------------
     // CÁCH 1: Dùng Google Gemini (Mặc định)
     // ----------------------------------------------------
-    // provider: 'google-gemini',
-    // apiKey: 'YOUR_GEMINI_API_KEY', 
-    // model: 'gemini-1.5-flash', // Khuyên dùng 1.5-flash hoặc 1.5-pro
+    provider: 'google-gemini',
+    apiKey: 'YOUR_GEMINI_API_KEY', 
+    model: 'gemini-flash-lite-latest', // Khuyên dùng gemini-flash-lite-latest cho tài khoản free
 
     // ----------------------------------------------------
     // CÁCH 2: Dùng NVIDIA NIM hoặc OpenAI-Compatible (Khuyên dùng)
     // ----------------------------------------------------
-    provider: 'openai-compatible',
-    baseURL: 'https://integrate.api.nvidia.com/v1', // Hoặc URL của OpenAI, Groq, Ollama...
-    apiKey: 'YOUR_NVIDIA_API_KEY', // Khuyên dùng biến môi trường process.env.API_KEY
-    model: 'meta/llama-3.1-70b-instruct' // Đổi tên model tương ứng với provider
+    // provider: 'openai-compatible',
+    // baseURL: 'https://integrate.api.nvidia.com/v1', // Hoặc URL của OpenAI, Groq, Ollama...
+    // apiKey: 'YOUR_NVIDIA_API_KEY', // Khuyên dùng biến môi trường process.env.API_KEY
+    // model: 'meta/llama-3.1-70b-instruct' // Đổi tên model tương ứng với provider
   },
   database: {
     type: 'mysql',
